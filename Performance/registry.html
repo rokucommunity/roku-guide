@@ -7,10 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Contributing
+        Registry
     </title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../style.css" />
 </head>
 
 <body>
@@ -40,7 +40,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="index.html">Introduction</a>
+            <a class="entry" href="../index.html">Introduction</a>
             
             
                 </div>
@@ -48,7 +48,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="component-libraries.html">Component Libraries</a>
+            <a class="entry" href="../component-libraries.html">Component Libraries</a>
             
             
                 </div>
@@ -58,13 +58,13 @@
             
             <div class="folder">
                 
-                <a class="name entry" href="Performance">Performance</a>
+                <a class="name entry" href="">Performance</a>
                 
                 
                 <div class="children">
                     
             
-            <a class="entry" href="Performance/index.html">Introduction</a>
+            <a class="entry" href="index.html">Introduction</a>
             
             
                 </div>
@@ -72,7 +72,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="Performance/associative-arrays-and-nodes.html">Associative Arrays and Nodes</a>
+            <a class="entry" href="associative-arrays-and-nodes.html">Associative Arrays and Nodes</a>
             
             
                 </div>
@@ -80,7 +80,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="Performance/cpus.html">CPUs</a>
+            <a class="entry" href="cpus.html">CPUs</a>
             
             
                 </div>
@@ -88,7 +88,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="Performance/registry.html">Registry</a>
+            <a class="entry" href="registry.html">Registry</a>
             
             
                 </div>
@@ -101,7 +101,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="socket-server.html">Socket Server</a>
+            <a class="entry" href="../socket-server.html">Socket Server</a>
             
             
                 </div>
@@ -109,7 +109,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="contributing.html">Contributing</a>
+            <a class="entry" href="../contributing.html">Contributing</a>
             
             
                 </div>
@@ -121,8 +121,9 @@
             
         </div>
         <div id="content">
-            <a href="#contributing"><h1 id="contributing">Contributing</h1></a><p>Write stuff, submit pull requests, success!</p>
-<p>TODO write an actual contributing guide...</p>
+            <a href="#registry"><h1 id="registry">Registry</h1></a><p>Reading and writing to and from the registry is quick enough, but the required flush after writes is not.  Creating a permanent singleton task to handle flushes, and even writes if wanted, moves that out of the render thread, and can make a significant different in performance if you are using the registry heavily, as I do as for persistent event count accumulators.</p>
+<p>Also, the registry uses a flash memory system, like an SSD drive but much smaller, and has a definite life span (number of times written).  This is normally a number in the hundreds of thousands of time per block, and the chips are extremely good about balancing the writes among the blocks and then disabling depleted blocks.  Excessively hammering the registry is a potential issue on device lifespan, although it would be difficult for a single channel to do any damage, unless it was a heavily used channel doing an insane and constant writing over a long term, such as using the registry for highly volatile global variables.</p>
+<p>Finally, the registry has a 16k limit for a given channel, and as the registry is compressed, 32k is probably more realistic, but storing a full video library catalog or images (not normally compressible so the statement above becomes weaker) and the like would not work well in the long run.</p>
             <div id="footer"></div>
         </div>
     </div>
