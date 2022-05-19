@@ -1,0 +1,4 @@
+#Benchmarks
+With BrightScript we have limited documentation of the cost of various functions, leaving it to us to benchmark options and decide which is best.
+
+Like many languages, when a specific operation or function is first performed, certain setup or initializations can take place internally, so when benchmarking a function using something like an roTimeSpan, run the operation at least once before (and outside of) the performance timing loop.  This takes care of any startup cost to using the function the first time, and gives a more accurate picture of the cost.  And, as always, timing one iteration of something small is effectively pointless, time a loop of thousands of the operation then divide, your loop should have enough iterations to run several seconds.  The BrightScript timer resolution of 1ms is very slow for benchmarking, and even with a sub-millisecond level timer, looped iterations give more accurate and useful readings.
