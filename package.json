@@ -1,0 +1,23 @@
+{
+    "name": "roku-guide",
+    "version": "0.0.0",
+    "description": "A community-maintained Roku documentation site ",
+    "author": {
+        "name": "RokuCommunity"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/RokuCommunity/roku-guide"
+    },
+    "bugs": {
+        "url": "https://github.com/RokuCommunity/roku-guide/issues"
+    },
+    "scripts": {
+        "build": "statigen -s docs -o .tmp/docs",
+        "watch": "npm run build -- --watch"
+    },
+    "devDependencies": {
+        "statigen": "^0.4.5"
+    }
+}
