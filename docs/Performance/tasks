@@ -3,7 +3,7 @@ Tasks are required for some items such as HTTP operations, and are good for othe
 
 But tasks threads are dramatically slower than the render thread.  I have heard numbers as high as a 10:1 difference in speed, although my benchmark tests showed about a 6:1 difference.  Using is tasks is good for offloading operations of the render thread, and in some cases, like the HTTP mentioned above, required.  But keep in mind the performance cost of relying on tasks too much for heavy processing or parsing.
 
-When using tasks, rendezvous are the automatic synchronization system of BrightScript when moving variables between the task and other threads, and should be minimized.  The cost has been greatly decreased from earlier version of BrightScript, but still is not free.  The VSCode BrightScript extension has specific trackers to see your rendezvous counts and times, and these can be limited using parameters, hoisting as mentioned in the next section, and refactoring if needed.  A goal of zero is unrealistic, must getting as close to minimal as possible is not.
+When using tasks, rendezvous are the automatic synchronization system of BrightScript when moving variables between the task and other threads, and should be minimized. The cost has been greatly decreased from earlier version of BrightScript, but still is not free. The [BrightScript Language] extension for VSCode has a dedicated rendezvous tracking section to visualize your rendezvous counts and times. Rendezvous occurrences can be reduced by using parameters, hoisting variables, and refactoring if needed.  A goal of zero rendezvous is unrealistic, but getting as close to minimal as possible is not.
 
 RAF must run as a task, and has a high rendezvous count, this is to my knowledge unavoidable.
 
