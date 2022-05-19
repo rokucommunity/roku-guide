@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Socket Server
+    </title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="navbar">
+        <div class="nav-left-area">
+            <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a href="/index.html">Roku Guide</a>
+        </div>
+        <a href="https://github.com/rokucommunity/roku-guide" target="_blank" title="View project on GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" style="fill: white" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg>
+        </a>
+    </div>
+    <div id="body-area">
+        <div id="sidebar">
+
+            
+            
+            <div class="folder">
+                
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="index.html">Introduction</a>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="component-libraries.html">component libraries</a>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <div class="folder">
+                
+                <a class="name entry" href="Performance">Performance</a>
+                
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="Performance/associative-arrays-and-nodes.html">Associative Arrays and Nodes</a>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="Performance/index.html">Performance</a>
+            
+            
+                </div>
+                
+            </div>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="socket-server.html">Socket Server</a>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="contributing.html">Contributing</a>
+            
+            
+                </div>
+                
+            </div>
+            
+            
+
+            
+        </div>
+        <div id="content">
+            <a href="#socket-server"><h1 id="socket-server">Socket Server</h1></a><p>I had a project with short form movie review videos, but had short intros and extros to be played before and after every video.  They wanted them to be seamless, to look like they were part of the original video, but also wanted them to be globally changeable for holidays, announcements, additions to channels we tracked (Netflix, Hulu, Amazon, and so on), etc.</p>
+<p>If I treated them as separate videos, which they were, there would be loading/buffering times before each of the segments, instead of just at startup.  This was against the spec I was given.</p>
+<p>My solution was to send the desired video url (from Vimeo) to the following function.  It would download the m3u8 file from the Vimeo server.  The intro/extro m3u8 files were already loaded and cached at channel startup.  A new m3u8 file was created, and stored to TMP, using the m3u8 discontinuity feature, combining the intro TS files, the video TS files, and the extro TS files.</p>
+<p>I then streamed the resulting m3u8 file using an roStreamSocket, from the users box (we used port 2188, but any available port would work), to play the video as if it was a single video.  Before RAF existed I also used this to embed ads supplied by Roku into the m3u8 for client side stitching, creating a single stream for the entire playback, with no interim loads.</p>
+<p>This is done before SceneGraph, tasks and the like were not yet part of BrightScript, so the code I have would not apply to current models and is not remotely runnable as is, but the general gist of it is in the following code segment.  A basic understanding of the m3u8 file format would be needed if trying to implement this ability, but should give a starting point.</p>
+<pre><code class="language-vb">Function VimeoM3U8(Size as string, Speeds, VideoLines, OriginalURL, UseIntrosExtros)
+    CRLF=chr(13)+chr(10)
+    Result = &quot;&quot;
+    for each Speed in Speeds
+       Value= &quot;#EXTM3U&quot; + CRLF + CRLF + &quot;#EXT-X-VERSION:3&quot; + CRLF + &quot;#EXT-X-MEDIA-SEQUENCE:0&quot; + CRLF + &quot;#EXT-X-ALLOW-CACHE:YES&quot; + CRLF + &quot;#EXT-X-TARGETDURATION:10&quot; + CRLF + CRLF
+       if (UseIntrosExtros and m.Files.Exists(&quot;tmp:/intro.ts&quot;)) Value=Value + #EXTINF:4.250,&quot;+CRLF+&quot;http://&quot;+m.IP+&quot;:2188/intro.ts&quot;+ CRLF + &quot;#EXT-X-DISCONTINUITY&quot;+CRLF
+         for each Line in VideoLines
+            if Line.Left(4)=&quot;INF:&quot;
+    Lines=StringSplitChar(Line,chr(10))
+    Value = Value + &quot;#EXT&quot; + Lines[0].trim() + CRLF + AbsoluteURL(Lines[1], OriginalURL) + CRLF
+            end if
+         end for
+      if (UseIntrosExtros and m.Files.Exists(&quot;tmp:/extro.ts&quot;)) Value=Value + &quot;#EXT-X-DISCONTINUITY&quot;+CRLF + &quot;#EXTINF:6.000,&quot;+CRLF+&quot;http://&quot;+m.IP+&quot;:2188/extro.ts&quot;+ CRLF
+          Value=Value + &quot;#EXT-X-ENDLIST&quot;
+          WriteAsciiFile(&quot;tmp:/x&quot;+ Speed.toStr()+ &quot;x&quot; +Size + &quot;.m3u8&quot;,Value)
+          Result = Result + &quot;#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=&quot; + (Speed*1000).ToStr()+&quot;,RESOLUTION=&quot;+Size + CRLF + &quot;http://&quot;+m.IP+&quot;:2188/x&quot;+Speed.toStr()+&quot;x&quot;+Size + &quot;.m3u8&quot;+CRLF
+          end for
+      return Result
+End Function
+</code></pre>
+            <div id="footer"></div>
+        </div>
+    </div>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>

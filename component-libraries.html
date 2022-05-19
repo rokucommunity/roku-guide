@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        component libraries
+    </title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="navbar">
+        <div class="nav-left-area">
+            <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a href="/index.html">Roku Guide</a>
+        </div>
+        <a href="https://github.com/rokucommunity/roku-guide" target="_blank" title="View project on GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" style="fill: white" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg>
+        </a>
+    </div>
+    <div id="body-area">
+        <div id="sidebar">
+
+            
+            
+            <div class="folder">
+                
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="index.html">Introduction</a>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="component-libraries.html">component libraries</a>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <div class="folder">
+                
+                <a class="name entry" href="Performance">Performance</a>
+                
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="Performance/associative-arrays-and-nodes.html">Associative Arrays and Nodes</a>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="Performance/index.html">Performance</a>
+            
+            
+                </div>
+                
+            </div>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="socket-server.html">Socket Server</a>
+            
+            
+                </div>
+                
+                <div class="children">
+                    
+            
+            <a class="entry" href="contributing.html">Contributing</a>
+            
+            
+                </div>
+                
+            </div>
+            
+            
+
+            
+        </div>
+        <div id="content">
+            <p>Component libraries are normally downloaded as needed, and not distributed with the channel itself in the channel zip file.  But they can be included with the channel itself, avoiding the download process for each user on every channel load, shortening the process from download then compile, to just a compile, which is done on channel load anyway.</p>
+<p>A simple zip file (exposed to any channel devs using the library) or a pkg file (with the source code protected) can be used for this embedded CL ability.</p>
+<p>A library is created, must be referenced in the library manifest, and zipped or optionally packaged.</p>
+<pre><code>sg_component_libs_provided=MyLibrary
+</code></pre>
+<p>A Node should also be created in the library exposing the public library functions:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;component name=&quot;MyLibrary&quot; extends=&quot;Node&quot;&gt;
+   &lt;interface&gt;
+        &lt;function name=&quot;func1&quot; /&gt;
+        &lt;function name=&quot;func2&quot; /&gt;
+    &lt;/interface&gt;
+    &lt;script type=&quot;text/brightscript&quot; uri=&quot;LibCode1.brs&quot; /&gt;
+    &lt;script type=&quot;text/brightscript&quot; uri=&quot;MoreCode2.brs&quot; /&gt;
+      …
+    &lt;script type=&quot;text/brightscript&quot; uri=&quot;EvenMoreLibCode.brs&quot; /&gt;
+&lt;/component&gt;
+</code></pre>
+<p>The library zip file should be included in the channel&#39;s source directory, then referenced via a stub file, also in the source directory, and any exposed subs/functions wrapped:</p>
+<pre><code class="language-vb">sub MyLib_Func1(Parameters): MyLib().callfunc(&quot;Func1&quot;, Parameters): end sub
+function MyLib_Func2(Parameters): return MyLib().callfunc(&quot;Func2&quot;, Parameters): end sub
+
+function MyLib()
+    Library= m.Global.MyLib
+    if Library&lt;&gt;invalid return Library&#39; If we have it already initialized in global memory return it
+    Library=CreateObject(&quot;roSGNode&quot;,&quot; MyLibrary: MyLibrary &quot;)
+          &#39; This and the next line can output log messages that the object can’t be created, this is normal if very early in channel initialization while the sub-compile takes place
+    while (Library=invalid): Sleep (128): Library=CreateObject(&quot;roSGNode&quot;,&quot; MyLibrary: MyLibrary&quot;): end while
+          &#39; If called too soon in channel initialization, this retries until it succeeds (in my experience a fraction of a second)
+    m.Global.AddFields({MyLib:Library}) &#39; Save the newly created component to global memory, so subsequent calls to this will return the stored value
+    return Library
+end function
+</code></pre>
+<p>This is load and compile the library the first time it is called, and store if to the global variable so it is available for subsequent calls.  The while…sleep(128) cycle is to give the CL a moment to compile.</p>
+<p>By putting the above initial load and store to global in the channel initialization code, the entire MyLib() function could be eliminated and replaced by calling m.Global.MyLib directly.  With minor code adjustments the zip or pkg file could be stored anywhere in the channel desired, but this assumes it’s in the source directory.</p>
+            <div id="footer"></div>
+        </div>
+    </div>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>
