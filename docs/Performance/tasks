@@ -7,4 +7,4 @@ When using tasks, rendezvous are the automatic synchronization system of BrightS
 
 RAF must run as a task, and has a high rendezvous count, this is to my knowledge unavoidable.
 
-Finally, BrightScript has limits on the number of active tasks, 50 generates a warning, and 100 will shut down a channel.  Using permanent tasks with field observers allows a single task to process repeated requests, and can help in minimizing this number.  These can even include multiple observed fields that trigger various functions.  The task will process the observed triggers one at a time in the order they are received.
+Finally, BrightScript has limits on the number of active tasks. 50 active tasks will generate a warning, and 100 will shut down a channel.  Using permanent tasks with field observers allows a single task to process repeated requests, and can help in minimizing the number of tasks.  These long-lived tasks can even include multiple observed fields that trigger various functions.  The task will process the observed triggers one at a time, in the order they are received.
