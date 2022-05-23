@@ -1,5 +1,5 @@
 # Singleton
-For some use-cases you want to always have the same instance of a component. F.e. when using app wide repositories oder managers.
+For some use-cases you want to always have the same instance of a component. F.e. when using app wide repositories or managers.
 I suggest to register all app wide managers, tasks, repositories, etc. in the interface of the scene and create them in the init.
 
 ```
