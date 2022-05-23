@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Associative Arrays and Nodes
+        Pattern
     </title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
     <link rel="stylesheet" href="../style.css" />
@@ -58,13 +58,13 @@
             
             <div class="folder">
                 
-                <a class="name entry" href="">Performance</a>
+                <a class="name entry" href="../Performance">Performance</a>
                 
                 
                 <div class="children">
                     
             
-            <a class="entry" href="index.html">Introduction</a>
+            <a class="entry" href="../Performance/index.html">Introduction</a>
             
             
                 </div>
@@ -72,7 +72,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="associative-arrays-and-nodes.html">Associative Arrays and Nodes</a>
+            <a class="entry" href="../Performance/associative-arrays-and-nodes.html">Associative Arrays and Nodes</a>
             
             
                 </div>
@@ -80,7 +80,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="cpus.html">CPUs</a>
+            <a class="entry" href="../Performance/cpus.html">CPUs</a>
             
             
                 </div>
@@ -88,7 +88,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="registry.html">Registry</a>
+            <a class="entry" href="../Performance/registry.html">Registry</a>
             
             
                 </div>
@@ -96,7 +96,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="tasks.html">Tasks</a>
+            <a class="entry" href="../Performance/tasks.html">Tasks</a>
             
             
                 </div>
@@ -119,13 +119,13 @@
             
             <div class="folder">
                 
-                <a class="name entry" href="../Structure">Structure</a>
+                <a class="name entry" href="">Structure</a>
                 
                 
                 <div class="children">
                     
             
-            <a class="entry" href="../Structure/pattern.html">Pattern</a>
+            <a class="entry" href="pattern.html">Pattern</a>
             
             
                 </div>
@@ -133,7 +133,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="../Structure/singleton-and-globals.html">Singleton</a>
+            <a class="entry" href="singleton-and-globals.html">Singleton</a>
             
             
                 </div>
@@ -187,11 +187,11 @@
             
         </div>
         <div id="content">
-            <a href="#associative-arrays-and-nodes"><h1 id="associative-arrays-and-nodes">Associative Arrays and Nodes</h1></a><p>Working mainly on a component library, where I don’t control program flow and have to store persistent information as global data, I have found (and have been shown) that there are certain advantages and disadvantages to using Associative Arrays vs roSGNodes of fields.</p>
-<p>Associative arrays are extremely flexible but not very performant under certain circumstances.  Items can be of course added and deleted as needed, without the exact key definition being defined or even known during development.  But they are a value type unlike many other languages.  If an AA crosses any type of boundary, be it a task, or being stored to or from the Global array, it seems it is fully serialized or deserialized as needed, even if only a single field somewhere in the tree is referenced.  The size and depth of an AA is a major factor in this cost, small AA’s are essentially fine, but large and/or deep arrays have a definite cost.  Finally any type of sub/function in an AA gets stripped during this transitions, so these portions can get repeatedly regenerated, even after initialization.</p>
-<p>Nodes with fields are reference types, and while they can invoke a rendezvous when access across a boundary, they still work faster for field access as the field itself can be addressed without processing the entire array.  Subs/functions in nodes are also not lost and regenerated as happens in AA’s.</p>
-<p>If multiple node fields are going to be referenced in a rendezvous situation, hoisting the node using GetFields() can improve performance by dropping the fields to a single AA, but again keep in mind scale, large AA’s are very expensive.  Also the result of using GetFields() is not a two-way binding to the node, you can change the hoisted AA, but it will not be saved to the node fields itself.  So this is a judgement call based on the cost of multiple rendezvous vs the cost of generating the GetFields() AA and field access.</p>
-<p>Finally, if you are going to repeatedly read a given AA or node field in a very large loop, you will increase performance by hoisting that variable prior to the loop. We’re not talking huge leaps here by any stretch, and this would be worthless on a small loop, but on a huge loop even a small performance increase can make the channel feel a bit less sluggish to the users.</p>
+            <a href="#pattern"><h1 id="pattern">Pattern</h1></a><p>Even though no pattern is enforced. It is always recommended to use one.</p>
+<a href="#mvc"><h2 id="mvc">MVC</h2></a><p>To adapt to the MVC-pattern you have to create the controller and initialize the model and the view inside the controller.
+The controller does only have the view as child, which is taking care of displaying the UI.
+The model is communicating with the repositories / managers via scene and returning the data back to the controller.
+The connections between controller, view and model can be set up with fields and observers.</p>
             <div id="footer"></div>
         </div>
     </div>

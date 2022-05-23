@@ -7,10 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Component Libraries
+        Singleton
     </title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../style.css" />
 </head>
 
 <body>
@@ -40,7 +40,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="index.html">Introduction</a>
+            <a class="entry" href="../index.html">Introduction</a>
             
             
                 </div>
@@ -48,7 +48,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="component-libraries.html">Component Libraries</a>
+            <a class="entry" href="../component-libraries.html">Component Libraries</a>
             
             
                 </div>
@@ -58,13 +58,13 @@
             
             <div class="folder">
                 
-                <a class="name entry" href="Performance">Performance</a>
+                <a class="name entry" href="../Performance">Performance</a>
                 
                 
                 <div class="children">
                     
             
-            <a class="entry" href="Performance/index.html">Introduction</a>
+            <a class="entry" href="../Performance/index.html">Introduction</a>
             
             
                 </div>
@@ -72,7 +72,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="Performance/associative-arrays-and-nodes.html">Associative Arrays and Nodes</a>
+            <a class="entry" href="../Performance/associative-arrays-and-nodes.html">Associative Arrays and Nodes</a>
             
             
                 </div>
@@ -80,7 +80,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="Performance/cpus.html">CPUs</a>
+            <a class="entry" href="../Performance/cpus.html">CPUs</a>
             
             
                 </div>
@@ -88,7 +88,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="Performance/registry.html">Registry</a>
+            <a class="entry" href="../Performance/registry.html">Registry</a>
             
             
                 </div>
@@ -96,7 +96,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="Performance/tasks.html">Tasks</a>
+            <a class="entry" href="../Performance/tasks.html">Tasks</a>
             
             
                 </div>
@@ -109,7 +109,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="seamless-multi-segment-hls-videos.html">Seamless Multi-Segment Videos (HLS)</a>
+            <a class="entry" href="../seamless-multi-segment-hls-videos.html">Seamless Multi-Segment Videos (HLS)</a>
             
             
                 </div>
@@ -119,13 +119,13 @@
             
             <div class="folder">
                 
-                <a class="name entry" href="Structure">Structure</a>
+                <a class="name entry" href="">Structure</a>
                 
                 
                 <div class="children">
                     
             
-            <a class="entry" href="Structure/pattern.html">Pattern</a>
+            <a class="entry" href="pattern.html">Pattern</a>
             
             
                 </div>
@@ -133,7 +133,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="Structure/singleton-and-globals.html">Singleton</a>
+            <a class="entry" href="singleton-and-globals.html">Singleton</a>
             
             
                 </div>
@@ -148,13 +148,13 @@
             
             <div class="folder">
                 
-                <a class="name entry" href="UI">UI</a>
+                <a class="name entry" href="../UI">UI</a>
                 
                 
                 <div class="children">
                     
             
-            <a class="entry" href="UI/round-corners.html">Round corners</a>
+            <a class="entry" href="../UI/round-corners.html">Round corners</a>
             
             
                 </div>
@@ -162,7 +162,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="UI/shadows.html">Shadows</a>
+            <a class="entry" href="../UI/shadows.html">Shadows</a>
             
             
                 </div>
@@ -175,7 +175,7 @@
                 <div class="children">
                     
             
-            <a class="entry" href="contributing.html">Contributing</a>
+            <a class="entry" href="../contributing.html">Contributing</a>
             
             
                 </div>
@@ -187,41 +187,24 @@
             
         </div>
         <div id="content">
-            <a href="#component-libraries"><h1 id="component-libraries">Component Libraries</h1></a><p>Component libraries are normally downloaded as needed, and not distributed with the channel itself in the channel zip file.  But they can be included with the channel itself, avoiding the download process for each user on every channel load, shortening the process from download then compile, to just a compile, which is done on channel load anyway.</p>
-<p>A simple zip file (exposed to any channel devs using the library) or a pkg file (with the source code protected) can be used for this embedded CL ability.</p>
-<p>A library is created, must be referenced in the library manifest, and zipped or optionally packaged.</p>
-<pre><code>sg_component_libs_provided=MyLibrary
+            <a href="#singleton"><h1 id="singleton">Singleton</h1></a><p>For some use-cases you want to always have the same instance of a component. F.e. when using app wide repositories or managers.
+I suggest to register all app wide managers, tasks, repositories, etc. in the interface of the scene and create them in the init.</p>
+<pre><code>&lt;!--- Scene xml ---&gt;
+&lt;interface&gt;
+    &lt;field id=&quot;myManager&quot; type=&quot;node&quot;&gt;
+&lt;/interface&gt;
 </code></pre>
-<p>A Node should also be created in the library exposing the public library functions:</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-&lt;component name=&quot;MyLibrary&quot; extends=&quot;Node&quot;&gt;
-   &lt;interface&gt;
-        &lt;function name=&quot;func1&quot; /&gt;
-        &lt;function name=&quot;func2&quot; /&gt;
-    &lt;/interface&gt;
-    &lt;script type=&quot;text/brightscript&quot; uri=&quot;LibCode1.brs&quot; /&gt;
-    &lt;script type=&quot;text/brightscript&quot; uri=&quot;MoreCode2.brs&quot; /&gt;
-      …
-    &lt;script type=&quot;text/brightscript&quot; uri=&quot;EvenMoreLibCode.brs&quot; /&gt;
-&lt;/component&gt;
-</code></pre>
-<p>The library zip file should be included in the channel&#39;s source directory, then referenced via a stub file, also in the source directory, and any exposed subs/functions wrapped:</p>
-<pre><code class="language-vb">sub MyLib_Func1(Parameters): MyLib().callfunc(&quot;Func1&quot;, Parameters): end sub
-function MyLib_Func2(Parameters): return MyLib().callfunc(&quot;Func2&quot;, Parameters): end sub
-
-function MyLib()
-    Library= m.Global.MyLib
-    if Library&lt;&gt;invalid return Library&#39; If we have it already initialized in global memory return it
-    Library=CreateObject(&quot;roSGNode&quot;,&quot; MyLibrary: MyLibrary &quot;)
-          &#39; This and the next line can output log messages that the object can’t be created, this is normal if very early in channel initialization while the sub-compile takes place
-    while (Library=invalid): Sleep (128): Library=CreateObject(&quot;roSGNode&quot;,&quot; MyLibrary: MyLibrary&quot;): end while
-          &#39; If called too soon in channel initialization, this retries until it succeeds (in my experience a fraction of a second)
-    m.Global.AddFields({MyLib:Library}) &#39; Save the newly created component to global memory, so subsequent calls to this will return the stored value
-    return Library
+<pre><code>&#39; Scene brs
+function Init()
+    m.top.myManager = Create(&quot;roSGNode&quot;, &quot;MyManager&quot;)
 end function
 </code></pre>
-<p>This is load and compile the library the first time it is called, and store if to the global variable so it is available for subsequent calls.  The while…sleep(128) cycle is to give the CL a moment to compile.</p>
-<p>By putting the above initial load and store to global in the channel initialization code, the entire MyLib() function could be eliminated and replaced by calling m.Global.MyLib directly.  With minor code adjustments the zip or pkg file could be stored anywhere in the channel desired, but this assumes it’s in the source directory.</p>
+<p>You can access your scene from all over the app like this:</p>
+<pre><code>&#39; any component brs
+m.top.getScene()
+</code></pre>
+<a href="#global-scope"><h1 id="global-scope">Global Scope</h1></a><p>The m.global scope on the other hand is great for storing simple values like colors, the current device resultion, version and more.
+It should not be used to add anything more than strings, boolean or integers.</p>
             <div id="footer"></div>
         </div>
     </div>
