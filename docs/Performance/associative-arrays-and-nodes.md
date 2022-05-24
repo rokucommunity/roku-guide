@@ -1,4 +1,5 @@
 # Associative Arrays and Nodes
+rokudevelopers.slack.com: @Scott Brower
 
 Working mainly on a component library, where I don’t control program flow and have to store persistent information as global data, I have found (and have been shown) that there are certain advantages and disadvantages to using Associative Arrays vs roSGNodes of fields.
 
