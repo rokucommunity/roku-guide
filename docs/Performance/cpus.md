@@ -1,4 +1,5 @@
 # CPUs
+rokudevelopers.slack.com: @Scott Brower
 
 Rokus are great devices, but when they are available at $30-$100 US dollars, they are not running 100 core CPUs enlisting additional processing help from 10,000 CUDA core GPU’s.  These are $.50¢ CPU’s with limited processing power and memory bandwidth.  Creating systems to make BrightScript more like what you are used to, JS, Angular, MVVM, OOP, or whatever, works and is a common approach, but when operations start getting nested in a dozen levels of hierarchy or indirection, and things like IoC, DI, bindings, and so on start coming into play the box has a noticeable performance hit, it just doesn’t have the beefiness we are used to and use on PC’s or gaming consoles.  
 
