@@ -1,5 +1,5 @@
 # Component Libraries
-rokudeveloper.slack.com: @Scott Brower
+rokudevelopers.slack.com: @Scott Brower
 
 Component libraries are normally downloaded as needed, and not distributed with the channel itself in the channel zip file.  But they can be included with the channel itself, avoiding the download process for each user on every channel load, shortening the process from download then compile, to just a compile, which is done on channel load anyway.
 
