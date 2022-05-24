@@ -1,4 +1,6 @@
 # Tasks
+rokudevelopers.slack.com: @Scott Brower
+
 Tasks are required for some items such as HTTP operations, and are good for other slow operations such as registry flushes.  They are also good for repeated timed operations such as regular configuration updates.  
 
 But tasks threads are dramatically slower than the render thread.  I have heard numbers as high as a 10:1 difference in speed, although my benchmark tests showed about a 6:1 difference.  Using tasks is good for offloading operations of the render thread, and in some cases, like the HTTP mentioned above, required.  However, always consider the performance cost of relying on tasks too much for heavy processing or parsing.
