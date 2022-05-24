@@ -1,4 +1,5 @@
 # Seamless Multi-Segment Videos (HLS)
+rokudeveloper.slack.com: @Scott Brower
 
 I had a project with short form movie review videos, but had short intros and extros to be played before and after every video.  They wanted them to be seamless, to look like they were part of the original video, but also wanted them to be globally changeable for holidays, announcements, additions to channels we tracked (Netflix, Hulu, Amazon, and soon), etc.  
 
