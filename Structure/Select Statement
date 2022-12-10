@@ -1,0 +1,24 @@
+Select Statement
+
+Brightscript uses sequences of if else statements to do what many other languages do using a select statement.  Since brigthscript doesnt have a select statement or any similar offering, the stacks of if else statements can become unreadable quickly, especially if some of the options include their own if else statements.
+
+A select statement can be simulated, but is can not match the performance of the if else tree unless the following conditions are met:
+  1) There are a dozen or more options (i.e. a dozen or more elses)
+  2) You predefine the option array below, hopefully to be used multiple or many times (vs defining an AA directly in the Select command)
+  
+First, a simple function is needed: function Select(Value, Options): return Options.Lookup(Value)?(): end function
+
+Second, you create the options array:
+  ButtonOptions={
+    "Play": function(): ... do whatever Play should do ...: end function
+    "Pause": function(): ...: end function
+    "Stop": function(): ...: end function
+    "Rewind": function(): ...: end function
+    "Forward": function(): ...: end function
+    "Stop": function(): ...: end function
+    ... ' Should be a least a dozen if a performance improvement is the intent
+    }
+    
+Third, you simply call it: Result = Select(Action, ButtonOptions)
+
+This can be much more readable than an if else tree, but unless you are dealing with lots of options (like a command parser) and predefine the option functions, there will definately be a performance hit compared to the if else tree.  But if both lots of options, and predefining the options applies, this method can outperform the if else tree, and that increases significantly as the number of options increases.
